@@ -1,0 +1,29 @@
+﻿@page "/Posts"
+@inject ClassLibrary.ISqlDataAccess _db
+
+<h3>Posts</h3>
+
+@if (posts is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @foreach (Post p in posts)
+    {
+        <div>
+            <h5>@p.PostTitle</h5>
+            @p.PostDate | <a href="mailto:@p.User.UserEmailAddress">@p.User.UserScreenName</a>
+            <p> <span>@p.PostContent</span></p>
+        </div>
+    }
+}
+
+@code {
+    private IList<Post> posts = new List<Post>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await _db.GetAllPosts();
+    }
+}

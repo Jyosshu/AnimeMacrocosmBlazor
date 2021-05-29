@@ -1,0 +1,36 @@
+﻿@page "/Series"
+@inject ClassLibrary.ISqlDataAccess _db
+
+<h3>Series</h3>
+
+@if (series is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var s in series)
+            {
+                <tr>
+                    <td> <a href="/Detail/@s.SeriesId">@s.Title</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IList<ClassLibrary.Models.Series> series;
+
+    protected override async Task OnInitializedAsync()
+    {
+        series = await _db.GetAllSeries();
+    }
+}
